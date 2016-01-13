@@ -18,6 +18,7 @@ type Item struct {
 	Guid        *string
 	PubDate     string
 	Source      *Source
+	Media       *Media
 
 	// Atom specific fields
 	Id           string
