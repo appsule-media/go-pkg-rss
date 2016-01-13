@@ -1,8 +1,6 @@
 package feeder
 
-import (
-	xmlx "github.com/jteeuwen/go-pkg-xmlx"
-)
+import xmlx "github.com/jteeuwen/go-pkg-xmlx"
 
 type MissingRssNodeError struct{}
 
@@ -198,6 +196,26 @@ func (this *Feed) readRss2(doc *xmlx.Document) (err error) {
 					i.Content = new(Content)
 					i.Content.Text = lv.String()
 					break
+				}
+			}
+
+			tl = item.SelectNodes("http://search.yahoo.com/mrss/", "*")
+			if len(tl) > 0 {
+				i.Media = new(Media)
+				for _, lv := range tl {
+					if lv.Name.Local == "thumbnail" {
+						th := new(Thumbnail)
+						th.Url = lv.As("", "url")
+						th.Width = lv.Ai("", "width")
+						th.Height = lv.Ai("", "height")
+						th.Time = lv.As("", "time")
+						i.Media.Thumbnails = append(i.Media.Thumbnails, th)
+					} else if lv.Name.Local == "content" {
+						content := new(MediaContent)
+						content.Url = lv.As("", "url")
+						content.Medium = lv.As("", "medium")
+						i.Media.Contents = append(i.Media.Contents, content)
+					}
 				}
 			}
 

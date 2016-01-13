@@ -2,6 +2,7 @@ package feeder
 
 type Media struct {
 	Thumbnails []*Thumbnail
+	Contents   []*MediaContent
 }
 
 type Thumbnail struct {
@@ -9,4 +10,9 @@ type Thumbnail struct {
 	Width  int
 	Height int
 	Time   string
+}
+
+type MediaContent struct {
+	Url    string
+	Medium string
 }
