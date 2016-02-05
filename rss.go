@@ -204,12 +204,20 @@ func (this *Feed) readRss2(doc *xmlx.Document) (err error) {
 				i.Media = new(Media)
 				for _, lv := range tl {
 					if lv.Name.Local == "thumbnail" {
-						th := new(Thumbnail)
-						th.Url = lv.As("", "url")
-						th.Width = lv.Ai("", "width")
-						th.Height = lv.Ai("", "height")
-						th.Time = lv.As("", "time")
-						i.Media.Thumbnails = append(i.Media.Thumbnails, th)
+						if url := lv.As("", "url"); url != "" {
+							th := new(Thumbnail)
+							th.Url = url
+							th.Width = lv.Ai("", "width")
+							th.Height = lv.Ai("", "height")
+							th.Time = lv.As("", "time")
+							i.Media.Thumbnails = append(i.Media.Thumbnails, th)
+						} else {
+							for _, child := range lv.Children {
+								th := new(Thumbnail)
+								th.Text = child.String()
+								i.Media.Thumbnails = append(i.Media.Thumbnails, th)
+							}
+						}
 					} else if lv.Name.Local == "content" {
 						content := new(MediaContent)
 						content.Url = lv.As("", "url")

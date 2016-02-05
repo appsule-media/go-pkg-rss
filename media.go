@@ -10,6 +10,7 @@ type Thumbnail struct {
 	Width  int
 	Height int
 	Time   string
+	Text   string
 }
 
 type MediaContent struct {
